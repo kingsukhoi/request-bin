@@ -1,0 +1,23 @@
+### GET health
+GET http://localhost:8080/healthz
+Accept: application/json
+
+### GET test requestbin
+GET http://localhost:8080/bin?queryparams=yup,there,here&moarparams=some;more;params
+Accept: application/json
+Content-Type: multipart/form-data;boundary=WebAppBoundary
+
+
+### POST test requestbin
+POST http://localhost:8080/bin?queryparams=yup,there,here&moarparams=some;more;params
+Accept: application/json
+Content-Type: multipart/form-data;boundary=WebAppBoundary
+
+{"somedata":true}
+
+
+### GET test resp code
+POST http://localhost:8080/respCode/500
+Accept: application/json
+
+{"somedata": true}
