@@ -24,8 +24,8 @@ type CreateQueryParametersParams struct {
 }
 
 const createRequest = `-- name: CreateRequest :exec
-INSERT INTO requests (id, method, content, source_ip, response_code)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO requests (id, method, content, source_ip, response_code, timestamp)
+VALUES ($1, $2, $3, $4, $5, $6)
 `
 
 type CreateRequestParams struct {
@@ -34,6 +34,7 @@ type CreateRequestParams struct {
 	Content      []byte
 	SourceIp     pgtype.Text
 	ResponseCode pgtype.Int4
+	Timestamp    pgtype.Timestamptz
 }
 
 func (q *Queries) CreateRequest(ctx context.Context, arg CreateRequestParams) error {
@@ -43,6 +44,7 @@ func (q *Queries) CreateRequest(ctx context.Context, arg CreateRequestParams) er
 		arg.Content,
 		arg.SourceIp,
 		arg.ResponseCode,
+		arg.Timestamp,
 	)
 	return err
 }

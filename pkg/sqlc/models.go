@@ -14,6 +14,7 @@ type Request struct {
 	Content      []byte
 	SourceIp     pgtype.Text
 	ResponseCode pgtype.Int4
+	Timestamp    pgtype.Timestamptz
 }
 
 type RequestHeader struct {

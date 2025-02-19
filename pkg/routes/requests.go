@@ -12,9 +12,12 @@ import (
 	db2 "request-bin/pkg/db"
 	"request-bin/pkg/sqlc"
 	"strings"
+	"time"
 )
 
 func handleRequest(ctx context.Context, currUUid uuid.UUID, respCode int, req *http.Request) error {
+
+	ts := time.Now()
 
 	db := db2.MustGetDatabase()
 
@@ -57,6 +60,11 @@ func handleRequest(ctx context.Context, currUUid uuid.UUID, respCode int, req *h
 		ResponseCode: pgtype.Int4{
 			Int32: int32(respCode),
 			Valid: true,
+		},
+		Timestamp: pgtype.Timestamptz{
+			Time:             ts,
+			InfinityModifier: 0,
+			Valid:            true,
 		},
 	})
 	if err != nil {
