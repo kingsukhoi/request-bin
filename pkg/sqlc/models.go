@@ -5,11 +5,12 @@
 package sqlc
 
 import (
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Request struct {
-	ID           pgtype.UUID
+	ID           uuid.UUID
 	Method       pgtype.Text
 	Content      []byte
 	SourceIp     pgtype.Text
@@ -18,13 +19,13 @@ type Request struct {
 }
 
 type RequestHeader struct {
-	RequestID pgtype.UUID
+	RequestID uuid.UUID
 	Name      string
 	Value     pgtype.Text
 }
 
 type RequestQueryParameter struct {
-	RequestID pgtype.UUID
+	RequestID uuid.UUID
 	Name      string
 	Value     pgtype.Text
 }

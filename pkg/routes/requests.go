@@ -44,10 +44,7 @@ func handleRequest(ctx context.Context, currUUid uuid.UUID, respCode int, req *h
 	}
 
 	err = queries.CreateRequest(ctx, sqlc.CreateRequestParams{
-		ID: pgtype.UUID{
-			Bytes: currUUid,
-			Valid: true,
-		},
+		ID: currUUid,
 		Method: pgtype.Text{
 			String: req.Method,
 			Valid:  true,
@@ -74,11 +71,8 @@ func handleRequest(ctx context.Context, currUUid uuid.UUID, respCode int, req *h
 	headersArray := make([]sqlc.CreateHeadersParams, 0)
 	for name, value := range req.Header {
 		curr := sqlc.CreateHeadersParams{
-			RequestID: pgtype.UUID{
-				Bytes: currUUid,
-				Valid: true,
-			},
-			Name: name,
+			RequestID: currUUid,
+			Name:      name,
 			Value: pgtype.Text{
 				String: strings.Join(value, ","),
 				Valid:  true,
@@ -94,11 +88,8 @@ func handleRequest(ctx context.Context, currUUid uuid.UUID, respCode int, req *h
 	queryArray := make([]sqlc.CreateQueryParametersParams, 0)
 	for name, value := range req.URL.Query() {
 		curr := sqlc.CreateQueryParametersParams{
-			RequestID: pgtype.UUID{
-				Bytes: currUUid,
-				Valid: true,
-			},
-			Name: name,
+			RequestID: currUUid,
+			Name:      name,
 			Value: pgtype.Text{
 				String: strings.Join(value, ","),
 				Valid:  true,

@@ -8,17 +8,18 @@ package sqlc
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type CreateHeadersParams struct {
-	RequestID pgtype.UUID
+	RequestID uuid.UUID
 	Name      string
 	Value     pgtype.Text
 }
 
 type CreateQueryParametersParams struct {
-	RequestID pgtype.UUID
+	RequestID uuid.UUID
 	Name      string
 	Value     pgtype.Text
 }
@@ -29,7 +30,7 @@ VALUES ($1, $2, $3, $4, $5, $6)
 `
 
 type CreateRequestParams struct {
-	ID           pgtype.UUID
+	ID           uuid.UUID
 	Method       pgtype.Text
 	Content      []byte
 	SourceIp     pgtype.Text
