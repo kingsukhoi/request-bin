@@ -21,3 +21,10 @@ POST http://localhost:8080/respCode/500
 Accept: application/json
 
 {"somedata": true}
+
+
+### GET test image review
+POST http://localhost:8080/imageReview
+Accept: application/json
+
+{"somedata": true}
