@@ -33,17 +33,17 @@ func main() {
 
 	privKeyPath, privKeySet := os.LookupEnv("TLS_PRIVATE_KEY_PATH")
 	certPath, certPathSet := os.LookupEnv("TLS_CERT_PATH")
-	port, portSet := os.LookupEnv("PORT")
+	tlsPort, tlsPortSet := os.LookupEnv("TLS_PORT")
 
-	if !portSet {
-		port = ":8080"
+	if privKeySet && certPathSet && tlsPortSet {
+		go func() {
+			errTls := r.RunTLS(tlsPort, certPath, privKeyPath)
+			if errTls != nil {
+				slog.Error("Error starting TLS server", "error", errTls)
+			}
+		}()
 	}
-
-	if privKeySet && certPathSet {
-		err = r.RunTLS(port, certPath, privKeyPath)
-	} else {
-		err = r.Run()
-	}
+	err = r.Run()
 
 	if err != nil {
 		slog.Error("Error stopping server", "error", err)
