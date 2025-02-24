@@ -31,7 +31,20 @@ func main() {
 
 	r := router.CreateRouter()
 
-	err = r.Run()
+	privKeyPath, privKeySet := os.LookupEnv("TLS_PRIVATE_KEY_PATH")
+	certPath, certPathSet := os.LookupEnv("TLS_CERT_PATH")
+	port, portSet := os.LookupEnv("PORT")
+
+	if !portSet {
+		port = ":8080"
+	}
+
+	if privKeySet && certPathSet {
+		err = r.RunTLS(port, certPath, privKeyPath)
+	} else {
+		err = r.Run()
+	}
+
 	if err != nil {
 		slog.Error("Error stopping server", "error", err)
 	}
