@@ -1,6 +1,9 @@
 module request-bin
 
-go 1.23
+go 1.23.0
+
+toolchain go1.24.1
+
 require (
 	github.com/amacneil/dbmate/v2 v2.25.0
 	github.com/gin-gonic/gin v1.10.0
