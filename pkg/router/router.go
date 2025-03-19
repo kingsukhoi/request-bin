@@ -21,7 +21,6 @@ func CreateRouter() *gin.Engine {
 	r.GET("/healthz", routes.HealthCheck)
 	r.Any("/bin", routes.DefaultRoute)
 	r.Any("/respCode/:code", routes.ResponseCode)
-	r.Any("/imageReview", routes.ImageReviewRoute)
 
 	return r
 }
