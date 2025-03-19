@@ -9,3 +9,7 @@ values ($1, $2, $3);
 -- name: CreateQueryParameters :copyfrom
 insert into request_query_parameters (request_id, name, value)
 values ($1,$2,$3);
+
+-- name: GetRequests :many
+select id, method,content,source_ip,response_code,timestamp
+from requests;
