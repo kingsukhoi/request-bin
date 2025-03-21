@@ -1,4 +1,4 @@
-package request_bin
+package backend
 
 // Due to a quirk in dbmate this file needs to be in the root dir
 

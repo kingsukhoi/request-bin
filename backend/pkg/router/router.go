@@ -10,11 +10,10 @@ import (
 func CreateRouter() *gin.Engine {
 	r := gin.New()
 
-	//if gin.Mode() == gin.ReleaseMode {
-	r.Use(sloggin.New(slog.Default())) // it's probably the json one setup in main
-	//} else {
-	//	r.Use(gin.Logger())
-	//}
+	r.Use(sloggin.NewWithConfig(slog.Default(), sloggin.Config{
+		WithTraceID:   true,
+		WithRequestID: true,
+	}))
 
 	r.Use(gin.Recovery())
 
@@ -22,5 +21,9 @@ func CreateRouter() *gin.Engine {
 	r.Any("/bin", routes.DefaultRoute)
 	r.Any("/respCode/:code", routes.ResponseCode)
 
+	v1Group := r.Group("/v1")
+	v1Group.GET("/requests", routes.GetRequests)
+	v1Group.GET("/requests/headers", routes.GetHeaders)
+	v1Group.GET("/requests/queryParams", routes.GetQueryParams)
 	return r
 }

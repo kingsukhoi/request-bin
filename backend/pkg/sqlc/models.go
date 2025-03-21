@@ -13,19 +13,19 @@ type Request struct {
 	ID           uuid.UUID          `json:"id"`
 	Method       pgtype.Text        `json:"method"`
 	Content      []byte             `json:"content"`
-	SourceIp     pgtype.Text        `json:"source_ip"`
-	ResponseCode pgtype.Int4        `json:"response_code"`
+	SourceIp     pgtype.Text        `json:"sourceIp"`
+	ResponseCode pgtype.Int4        `json:"responseCode"`
 	Timestamp    pgtype.Timestamptz `json:"timestamp"`
 }
 
 type RequestHeader struct {
-	RequestID uuid.UUID   `json:"request_id"`
+	RequestID uuid.UUID   `json:"requestId"`
 	Name      string      `json:"name"`
 	Value     pgtype.Text `json:"value"`
 }
 
 type RequestQueryParameter struct {
-	RequestID uuid.UUID   `json:"request_id"`
+	RequestID uuid.UUID   `json:"requestId"`
 	Name      string      `json:"name"`
 	Value     pgtype.Text `json:"value"`
 }

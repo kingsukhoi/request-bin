@@ -22,9 +22,18 @@ Accept: application/json
 
 {"somedata": true}
 
-
-### GET test image review
-POST http://localhost:8080/imageReview
+### GET requests
+GET http://localhost:8080/v1/requests
 Accept: application/json
 
-{"somedata": true}
+### GET headers by id
+GET http://localhost:8080/v1/requests/headers?request_id=0195361a-55c3-76e6-a7bf-0ad0b0fe5a18
+
+### GET headers
+GET http://localhost:8080/v1/requests/headers
+
+### GET query params by id
+GET http://localhost:8080/v1/requests/queryParams?request_id=0195361a-55c3-76e6-a7bf-0ad0b0fe5a18
+
+### GET query params
+GET http://localhost:8080/v1/requests/queryParams
