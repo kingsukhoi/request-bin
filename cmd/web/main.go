@@ -43,6 +43,7 @@ func main() {
 			}
 		}()
 	}
+
 	err = r.Run()
 
 	if err != nil {

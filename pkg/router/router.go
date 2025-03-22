@@ -1,14 +1,22 @@
 package router
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	sloggin "github.com/samber/slog-gin"
 	"log/slog"
 	"request-bin/pkg/routes"
+	"time"
 )
 
 func CreateRouter() *gin.Engine {
 	r := gin.New()
+
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true
+	corsConfig.MaxAge = 1 * time.Second
+
+	r.Use(cors.New(corsConfig))
 
 	r.Use(sloggin.NewWithConfig(slog.Default(), sloggin.Config{
 		WithTraceID:   true,
