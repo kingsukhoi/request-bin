@@ -1,6 +1,13 @@
-version: '3.8'
+version: "3.8"
 
 services:
+  request-bin:
+    image: request-bin:latest
+    container_name: request-bin
+    environment:
+      DB_URL: postgres://postgres:yourpassword@postgres:5432/postgres?sslmode=disable
+    ports:
+      - "8080:8080"
   postgres:
     image: postgres:17
     container_name: postgres_db
@@ -15,3 +22,4 @@ services:
 
 volumes:
   postgres_data:
+
