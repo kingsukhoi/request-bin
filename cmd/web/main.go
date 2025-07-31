@@ -5,11 +5,14 @@ import (
 	"log/slog"
 	"os"
 	dbMigrations "request-bin"
+	"request-bin/pkg/conf"
 	"request-bin/pkg/db"
 	"request-bin/pkg/router"
 )
 
 func main() {
+
+	config := conf.MustGetConfig()
 
 	var logger *slog.Logger
 
@@ -31,13 +34,9 @@ func main() {
 
 	r := router.CreateRouter()
 
-	privKeyPath, privKeySet := os.LookupEnv("TLS_PRIVATE_KEY_PATH")
-	certPath, certPathSet := os.LookupEnv("TLS_CERT_PATH")
-	tlsPort, tlsPortSet := os.LookupEnv("TLS_PORT")
-
-	if privKeySet && certPathSet && tlsPortSet {
+	if config.Tls.KeyPath != "" && config.Tls.CertPath != "" {
 		go func() {
-			errTls := r.RunTLS(tlsPort, certPath, privKeyPath)
+			errTls := r.RunTLS(config.Tls.Port, config.Tls.CertPath, config.Tls.KeyPath)
 			if errTls != nil {
 				slog.Error("Error starting TLS server", "error", errTls)
 			}

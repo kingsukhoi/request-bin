@@ -7,7 +7,7 @@ import (
 	"github.com/amacneil/dbmate/v2/pkg/dbmate"
 	_ "github.com/amacneil/dbmate/v2/pkg/driver/postgres"
 	"log/slog"
-	"os"
+	"request-bin/pkg/conf"
 
 	"net/url"
 )
@@ -16,7 +16,9 @@ import (
 var dbMigrations embed.FS
 
 func RunMigrations() error {
-	dbUrl := os.Getenv("DB_URL")
+	config := conf.MustGetConfig()
+
+	dbUrl := config.DbUrl
 
 	u, _ := url.Parse(dbUrl)
 	dbMate := dbmate.New(u)
