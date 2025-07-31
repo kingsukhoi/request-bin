@@ -1,6 +1,6 @@
 -- name: CreateRequest :exec
-INSERT INTO requests (id, method, content, source_ip, response_code, timestamp)
-VALUES ($1, $2, $3, $4, $5, $6);
+INSERT INTO requests (id, method, content, source_ip, response_code, timestamp, path)
+VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 -- name: CreateHeaders :copyfrom
 insert into request_headers (request_id, name, value)

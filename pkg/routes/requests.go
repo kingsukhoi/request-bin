@@ -51,6 +51,10 @@ func handleRequest(ctx context.Context, currUUid uuid.UUID, respCode int, req *h
 
 	err = queries.CreateRequest(ctx, sqlc.CreateRequestParams{
 		ID: currUUid,
+		Path: pgtype.Text{
+			String: req.URL.Path,
+			Valid:  true,
+		},
 		Method: pgtype.Text{
 			String: req.Method,
 			Valid:  true,

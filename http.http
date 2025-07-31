@@ -15,6 +15,13 @@ Content-Type: multipart/form-data;boundary=WebAppBoundary
 
 {"somedata":true}
 
+### POST test custom trace path
+POST http://localhost:8080/v1/trace
+Accept: application/json
+Content-Type: multipart/form-data;boundary=WebAppBoundary
+
+{"somedata":true}
+
 
 ### GET test resp code
 POST http://localhost:8080/respCode/500

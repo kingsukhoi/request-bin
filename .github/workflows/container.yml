@@ -6,6 +6,14 @@ name: Build Container
 on:
   push:
     branches: ["master"]
+    paths-ignore:
+      - qodana.yaml
+      - sqlc.yaml
+      - http.http
+      - query.sql
+      - docker-compose.yaml
+      - .gitignore
+      - .github/dependabot.yml
 
 jobs:
   build:
