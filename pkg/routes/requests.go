@@ -10,6 +10,7 @@ import (
 	"log/slog"
 	"net/http"
 	db2 "request-bin/pkg/db"
+	"request-bin/pkg/helpers"
 	"request-bin/pkg/sqlc"
 	"strings"
 	"time"
@@ -41,6 +42,11 @@ func handleRequest(ctx context.Context, currUUid uuid.UUID, respCode int, req *h
 		if err != nil {
 			return err
 		}
+	}
+
+	bodyBytes, err = helpers.CheckAndDecompressGzip(bodyBytes)
+	if err != nil {
+		slog.ErrorContext(ctx, "Error decompressing gzip", err, "request-id", currUUid)
 	}
 
 	err = queries.CreateRequest(ctx, sqlc.CreateRequestParams{
