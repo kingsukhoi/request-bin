@@ -1,11 +1,12 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"log/slog"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func ResponseCode(c *gin.Context) {

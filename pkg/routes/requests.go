@@ -2,10 +2,6 @@ package routes
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgtype"
 	"io"
 	"log/slog"
 	"net/http"
@@ -14,6 +10,11 @@ import (
 	"request-bin/pkg/sqlc"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 func handleRequest(ctx context.Context, currUUid uuid.UUID, respCode int, req *http.Request) error {

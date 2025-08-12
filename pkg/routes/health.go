@@ -1,9 +1,10 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
 	"log/slog"
 	"request-bin/pkg/db"
+
+	"github.com/gin-gonic/gin"
 )
 
 func HealthCheck(c *gin.Context) {
