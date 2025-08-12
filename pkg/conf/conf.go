@@ -1,8 +1,9 @@
 package conf
 
 import (
-	"github.com/ilyakaznacheev/cleanenv"
 	"sync"
+
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Conf struct {
