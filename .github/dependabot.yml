@@ -5,6 +5,15 @@
 
 version: 2
 updates:
+  - package-ecosystem: "github-actions" # See documentation for possible values
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    groups:
+      go-deps:
+        applies-to: version-updates
+        patterns:
+          - "*"
   - package-ecosystem: "gomod" # See documentation for possible values
     directory: "/" # Location of package manifest
     schedule:
