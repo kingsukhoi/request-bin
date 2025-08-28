@@ -1,24 +1,22 @@
 package router
 
 import (
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	sloggin "github.com/samber/slog-gin"
 	"log/slog"
 	"request-bin/pkg/conf"
 	"request-bin/pkg/routes"
 	"strings"
 	"time"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	sloggin "github.com/samber/slog-gin"
 )
 
 func CreateRouter() *gin.Engine {
 
 	config := conf.MustGetConfig()
 
-	customPaths := strings.Split(config.CustomRoutes.Paths, ",")
-	if len(customPaths) == 1 && customPaths[0] == "" {
-		customPaths = nil
-	}
+	customPaths := config.CustomRoutes.Paths
 
 	slog.Info("Custom paths", "paths", customPaths, "count", len(customPaths))
 

@@ -13,7 +13,7 @@ type Conf struct {
 }
 
 type CustomRoutes struct {
-	Paths string `yaml:"paths" env:"CUSTOM_ROUTES"`
+	Paths []string `yaml:"paths" env:"CUSTOM_ROUTES" env-default:""`
 }
 type TlsConf struct {
 	CertPath string `yaml:"cert_path" env:"TLS_CERT_PATH"`
