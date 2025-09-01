@@ -11,7 +11,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgx/v5 v5.7.5
-	github.com/samber/slog-gin v1.16.1
+	github.com/samber/slog-gin v1.17.1
 )
 
 require (
