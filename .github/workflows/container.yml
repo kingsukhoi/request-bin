@@ -57,14 +57,14 @@ jobs:
           docker pull ghcr.io/${{github.repository}}:${{ github.sha }} > /dev/null
           echo "image_sha=$(docker image inspect ghcr.io/${{github.repository}}:${{ github.sha }} | jq '.[0].RepoDigests[0]' | cut -d ':' -f 2 | cut -d '"' -f 1)" >> $GITHUB_OUTPUT
       - name: Attest
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         id: attest
         with:
           subject-name: ghcr.io/${{github.repository}}
           subject-digest: "sha256:${{steps.build.outputs.image_sha}}"
           push-to-registry: true
       - name: Run Trivy scanner
-        uses: aquasecurity/trivy-action@0.32.0
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: "ghcr.io/${{github.repository}}:${{ github.sha }}"
           output: trivy.txt
