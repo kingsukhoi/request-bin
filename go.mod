@@ -10,8 +10,8 @@ require (
 	github.com/gin-gonic/gin v1.10.1
 	github.com/google/uuid v1.6.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
-	github.com/jackc/pgx/v5 v5.7.5
-	github.com/samber/slog-gin v1.17.1
+	github.com/jackc/pgx/v5 v5.7.6
+	github.com/samber/slog-gin v1.17.2
 )
 
 require (
