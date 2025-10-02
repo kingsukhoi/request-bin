@@ -2,6 +2,14 @@
 GET http://localhost:8080/healthz
 Accept: application/json
 
+### OPTIONS root
+OPTIONS http://localhost:8080/
+Accept: application/json
+
+### OPTIONS azure event grid
+OPTIONS http://localhost:8080/azure/eventGrid
+Accept: application/json
+
 ### GET test requestbin
 GET http://localhost:8080/bin?queryparams=yup,there,here&moarparams=some;more;params
 Accept: application/json

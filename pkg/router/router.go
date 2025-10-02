@@ -36,8 +36,14 @@ func CreateRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 	r.GET("/healthz", routes.HealthCheck)
 	r.GET("/", routes.HealthCheck)
+	r.OPTIONS("/", routes.DefaultRoute)
+
 	r.Any("/bin", routes.DefaultRoute)
 	r.Any("/respCode/:code", routes.ResponseCode)
+
+	azureGroup := r.Group("/azure")
+	azureGroup.POST("/eventGrid", routes.DefaultRoute)
+	azureGroup.OPTIONS("/eventGrid", routes.EventGridOptions)
 
 	v1Group := r.Group("/rbv1")
 	v1Group.GET("/requests", routes.GetRequests)
