@@ -2,9 +2,10 @@ package db
 
 import (
 	"context"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"request-bin/pkg/conf"
 	"sync"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 var db *pgxpool.Pool
@@ -16,6 +17,10 @@ func MustGetDatabase() *pgxpool.Pool {
 		config := conf.MustGetConfig()
 		dbUrl := config.DbUrl
 		pool, err := pgxpool.New(context.Background(), dbUrl)
+		if err != nil {
+			panic(err)
+		}
+		err = pool.Ping(context.Background())
 		if err != nil {
 			panic(err)
 		}
