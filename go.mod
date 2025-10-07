@@ -1,4 +1,4 @@
-module request-bin
+module github.com/kingsukhoi/request-bin
 
 go 1.24.0
 

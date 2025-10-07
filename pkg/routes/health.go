@@ -1,8 +1,8 @@
 package routes
 
 import (
+	"github.com/kingsukhoi/request-bin/pkg/db"
 	"log/slog"
-	"request-bin/pkg/db"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,9 +1,9 @@
 package router
 
 import (
+	"github.com/kingsukhoi/request-bin/pkg/conf"
+	"github.com/kingsukhoi/request-bin/pkg/routes"
 	"log/slog"
-	"request-bin/pkg/conf"
-	"request-bin/pkg/routes"
 	"strings"
 	"time"
 

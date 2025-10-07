@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	dbMigrations "github.com/kingsukhoi/request-bin"
+	"github.com/kingsukhoi/request-bin/pkg/conf"
+	"github.com/kingsukhoi/request-bin/pkg/db"
+	"github.com/kingsukhoi/request-bin/pkg/router"
 	"log/slog"
 	"os"
-	dbMigrations "request-bin"
-	"request-bin/pkg/conf"
-	"request-bin/pkg/db"
-	"request-bin/pkg/router"
 )
 
 func main() {

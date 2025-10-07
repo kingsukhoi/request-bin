@@ -6,8 +6,8 @@ import (
 	"embed"
 	"github.com/amacneil/dbmate/v2/pkg/dbmate"
 	_ "github.com/amacneil/dbmate/v2/pkg/driver/postgres"
+	"github.com/kingsukhoi/request-bin/pkg/conf"
 	"log/slog"
-	"request-bin/pkg/conf"
 
 	"net/url"
 )

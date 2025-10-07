@@ -1,9 +1,9 @@
 package routes
 
 import (
+	db2 "github.com/kingsukhoi/request-bin/pkg/db"
+	"github.com/kingsukhoi/request-bin/pkg/sqlc"
 	"log/slog"
-	db2 "request-bin/pkg/db"
-	"request-bin/pkg/sqlc"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
