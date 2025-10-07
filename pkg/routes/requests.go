@@ -2,14 +2,15 @@ package routes
 
 import (
 	"context"
-	db2 "github.com/kingsukhoi/request-bin/pkg/db"
-	"github.com/kingsukhoi/request-bin/pkg/helpers"
-	"github.com/kingsukhoi/request-bin/pkg/sqlc"
 	"io"
 	"log/slog"
 	"net/http"
 	"strings"
 	"time"
+
+	db2 "github.com/kingsukhoi/request-bin/pkg/db"
+	"github.com/kingsukhoi/request-bin/pkg/helpers"
+	"github.com/kingsukhoi/request-bin/pkg/sqlc"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"

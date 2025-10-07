@@ -1,13 +1,14 @@
 package main
 
 import (
+	"log/slog"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	dbMigrations "github.com/kingsukhoi/request-bin"
 	"github.com/kingsukhoi/request-bin/pkg/conf"
 	"github.com/kingsukhoi/request-bin/pkg/db"
 	"github.com/kingsukhoi/request-bin/pkg/router"
-	"log/slog"
-	"os"
 )
 
 func main() {

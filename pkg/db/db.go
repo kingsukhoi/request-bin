@@ -2,8 +2,9 @@ package db
 
 import (
 	"context"
-	"github.com/kingsukhoi/request-bin/pkg/conf"
 	"sync"
+
+	"github.com/kingsukhoi/request-bin/pkg/conf"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

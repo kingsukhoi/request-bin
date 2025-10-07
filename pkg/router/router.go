@@ -1,11 +1,12 @@
 package router
 
 import (
-	"github.com/kingsukhoi/request-bin/pkg/conf"
-	"github.com/kingsukhoi/request-bin/pkg/routes"
 	"log/slog"
 	"strings"
 	"time"
+
+	"github.com/kingsukhoi/request-bin/pkg/conf"
+	"github.com/kingsukhoi/request-bin/pkg/routes"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
