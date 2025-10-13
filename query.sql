@@ -8,26 +8,26 @@ values ($1, $2, $3);
 
 -- name: CreateQueryParameters :copyfrom
 insert into request_query_parameters (request_id, name, value)
-values ($1,$2,$3);
+values ($1, $2, $3);
 
 -- name: GetRequests :many
-select id, method,content,source_ip,response_code,timestamp
+select id, method, content, source_ip, response_code, timestamp, path
 from requests;
 
 -- name: GetHeadersById :many
-select request_id, name,value
+select request_id, name, value
 from request_headers
 where request_id = $1;
 
 -- name: GetQueryParamsById :many
-select request_id, name,value
+select request_id, name, value
 from request_query_parameters
 where request_id = $1;
 
 -- name: GetHeaders :many
-select request_id, name,value
+select request_id, name, value
 from request_headers;
 
 -- name: GetQueryParams :many
-select request_id, name,value
+select request_id, name, value
 from request_query_parameters;
