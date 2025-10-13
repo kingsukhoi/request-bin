@@ -38,17 +38,17 @@ Accept: application/json
 {"somedata": true}
 
 ### GET requests
-GET http://localhost:8080/v1/requests
+GET http://localhost:8080/rbv1/requests
 Accept: application/json
 
 ### GET headers by id
-GET http://localhost:8080/v1/requests/headers?request_id=0195361a-55c3-76e6-a7bf-0ad0b0fe5a18
+GET http://localhost:8080/rbv1/requests/headers?request_id=0199dee5-f5be-7ac1-b50b-204a770fde67
 
 ### GET headers
-GET http://localhost:8080/v1/requests/headers
+GET http://localhost:8080/rbv1/requests/headers
 
 ### GET query params by id
-GET http://localhost:8080/v1/requests/queryParams?request_id=0195361a-55c3-76e6-a7bf-0ad0b0fe5a18
+GET http://localhost:8080/rbv1/requests/queryParams?request_id=0199dee5-f5be-7ac1-b50b-204a770fde67
 
 ### GET query params
-GET http://localhost:8080/v1/requests/queryParams
+GET http://localhost:8080/rbv1/requests/queryParams
