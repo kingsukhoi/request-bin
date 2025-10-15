@@ -27,6 +27,19 @@ jobs:
       id-token: write
       contents: read
     steps:
+      - uses: actions/checkout@v5
+      - name: Enable corepack
+        run: corepack enable
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: "./frontend/package.json"
+          cache: pnpm
+      - name: build frontend
+        run: |
+          cd frontend
+          pnpm install --frozen-lockfile
+          pnpm run build
       - name: Docker Setup Buildx
         uses: docker/setup-buildx-action@v3.11.1
       - name: Log in to the Container registry
@@ -49,18 +62,6 @@ jobs:
         with:
           path: ./pack-cache
           key: "${{ hashFiles('go.mod', 'go.sum') }}"
-      - name: Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: "./frontend/package.json"
-          cache: pnpm
-      - name: Enable corepack
-        run: corepack enable
-      - name: build frontend
-        run: |
-          cd frontend
-          pnpm install --frozen-lockfile
-          pnpm run build
       - name: Build Container
         id: build
         run: |
