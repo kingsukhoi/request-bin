@@ -1,7 +1,12 @@
 package router
 
 import (
+	"errors"
+	"io/fs"
 	"log/slog"
+	"net/http"
+	"os"
+	"path"
 	"strings"
 	"time"
 
@@ -35,9 +40,8 @@ func CreateRouter() *gin.Engine {
 	}))
 
 	r.Use(gin.Recovery())
+
 	r.GET("/healthz", routes.HealthCheck)
-	r.GET("/", routes.HealthCheck)
-	r.OPTIONS("/", routes.DefaultRoute)
 
 	r.Any("/bin", routes.DefaultRoute)
 	r.Any("/respCode/:code", routes.ResponseCode)
@@ -51,14 +55,57 @@ func CreateRouter() *gin.Engine {
 	v1Group.GET("/requests/headers", routes.GetHeaders)
 	v1Group.GET("/requests/queryParams", routes.GetQueryParams)
 
-	for _, path := range customPaths {
-		path = strings.TrimSpace(path)
-		if !strings.HasPrefix(path, "/") {
-			slog.Error("Invalid path Skipping. Paths must start with a /", "path", path)
+	for _, cPath := range customPaths {
+		cPath = strings.TrimSpace(cPath)
+		if !strings.HasPrefix(cPath, "/") {
+			slog.Error("Invalid path Skipping. Paths must start with a /", "path", cPath)
 			continue
 		}
-		r.Any(path, routes.DefaultRoute)
+		r.Any(cPath, routes.DefaultRoute)
+	}
+
+	fePathExists, err := pathExist(config.FrontEndPath)
+	if err != nil {
+		slog.Error("Error checking frontend path", "path", config.FrontEndPath, "error", err)
+		fePathExists = false
+	}
+
+	if fePathExists {
+		assetsFolderPath := path.Join(config.FrontEndPath, "assets")
+		r.StaticFS("/assets", http.Dir(assetsFolderPath))
+
+		publicAssets, _ := os.ReadDir(config.FrontEndPath)
+
+		r.NoRoute(func(c *gin.Context) {
+
+			slog.Info("path is", "path", c.Request.URL.Path)
+
+			matchMe := strings.TrimPrefix(c.Request.URL.Path, "/")
+
+			for _, entry := range publicAssets {
+				if entry.Name() == matchMe && !entry.IsDir() {
+					c.File(path.Join(config.FrontEndPath, entry.Name()))
+					return
+				}
+			}
+			c.File(path.Join(config.FrontEndPath, "index.html"))
+		})
+
+	} else {
+		r.GET("/", routes.HealthCheck)
+		r.OPTIONS("/", routes.DefaultRoute)
 	}
 
 	return r
+}
+
+func pathExist(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if errors.Is(err, fs.ErrNotExist) {
+		return false, nil
+	}
+	return false, err
 }
