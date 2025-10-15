@@ -27,6 +27,18 @@ jobs:
       id-token: write
       contents: read
     steps:
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: "frontend/package.json"
+          cache: pnpm
+      - name: Enable corepack
+        run: corepack enable
+      - name: build frontend
+        run: |
+          cd frontend
+          pnpm install --frozen-lockfile
+          pnpm run build
       - name: Docker Setup Buildx
         uses: docker/setup-buildx-action@v3.11.1
       - name: Log in to the Container registry
@@ -53,7 +65,7 @@ jobs:
         id: build
         run: |
           pack build --publish ghcr.io/${{github.repository}}:${{ github.sha }}  -t ghcr.io/${{github.repository}}:latest -t ghcr.io/${{github.repository}}:${{ steps.shortsha.outputs.sha_short }} -B paketobuildpacks/builder-jammy-tiny \
-            --env BP_GO_TARGETS="cmd/web" --env BP_GIN_MODE="release" --cache='type=build;format=bind;source=./pack-cache'
+            --env BP_GO_TARGETS="cmd/web" --env BP_GIN_MODE="release" --env BP_FRONT_END_PATH="/workspace/frontend/dist" --cache='type=build;format=bind;source=./pack-cache'
           docker pull ghcr.io/${{github.repository}}:${{ github.sha }} > /dev/null
           echo "image_sha=$(docker image inspect ghcr.io/${{github.repository}}:${{ github.sha }} | jq '.[0].RepoDigests[0]' | cut -d ':' -f 2 | cut -d '"' -f 1)" >> $GITHUB_OUTPUT
       - name: Attest

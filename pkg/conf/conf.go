@@ -10,6 +10,7 @@ type Conf struct {
 	DbUrl        string  `yaml:"db_url" env:"DB_URL"`
 	Tls          TlsConf `yaml:"tls"`
 	CustomRoutes CustomRoutes
+	FrontEndPath string `yaml:"front_end_path" env:"FRONT_END_PATH" env-default:"./frontend/dist"`
 }
 
 type CustomRoutes struct {
