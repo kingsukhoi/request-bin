@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useCallback, useRef} from 'react'
 import './App.css'
 import {RequestsTable} from './components/RequestsTable'
 import {RequestDetails} from './components/RequestDetails'
@@ -9,16 +9,39 @@ function App() {
     const [requests, setRequests] = useState<Request[]>([])
 
     const [selectedRequest, setSelectedRequest] = useState<Request | null>(null)
+    const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null)
+    const [isRefreshing, setIsRefreshing] = useState(false)
+    const debounceRef = useRef<number | null>(null)
+
+    const refreshRequests = useCallback(async () => {
+        if (isRefreshing) return
+
+        setIsRefreshing(true)
+        try {
+            const requests = await GetRequests()
+            setRequests(requests)
+            setLastRefreshed(new Date())
+            setIsRefreshing(false)
+        } catch {
+            setIsRefreshing(false)
+        }
+    }, [isRefreshing])
+
+    const debouncedRefresh = useCallback(() => {
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current)
+        }
+        debounceRef.current = setTimeout(() => {
+            refreshRequests()
+        }, 300)
+    }, [refreshRequests])
 
     useEffect(() => {
-        GetRequests().then(setRequests)
-
-        const interval = setInterval(() => {
-            GetRequests().then(setRequests)
-        }, 10000)
-
-        return () => clearInterval(interval)
-    }, [])
+        const loadInitialData = async () => {
+            await refreshRequests()
+        }
+        loadInitialData()
+    }, [])//leave that empty or it spams the server
 
 
     return (
@@ -32,6 +55,9 @@ function App() {
                 <RequestsTable
                     requests={requests}
                     onSelectRequest={setSelectedRequest}
+                    onRefresh={debouncedRefresh}
+                    lastRefreshed={lastRefreshed}
+                    isRefreshing={isRefreshing}
                 />
 
                 {selectedRequest && (

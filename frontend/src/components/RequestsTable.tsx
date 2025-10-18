@@ -3,9 +3,12 @@ import type {Request} from "../api"
 interface RequestsTableProps {
     requests: Request[]
     onSelectRequest: (request: Request) => void
+    onRefresh: () => void
+    lastRefreshed: Date | null
+    isRefreshing: boolean
 }
 
-export function RequestsTable({requests, onSelectRequest}: RequestsTableProps) {
+export function RequestsTable({requests, onSelectRequest, onRefresh, lastRefreshed, isRefreshing}: RequestsTableProps) {
     const getMethodColor = (method: string) => {
         const colors: Record<string, string> = {
             GET: '#61affe',
@@ -22,7 +25,23 @@ export function RequestsTable({requests, onSelectRequest}: RequestsTableProps) {
 
     return (
         <div className="requests-table-container">
-            <h2>Incoming Requests</h2>
+            <div className="requests-header">
+                <h2>Incoming Requests</h2>
+                <div className="refresh-section">
+                    {lastRefreshed && (
+                        <span className="last-refreshed">
+                            Last updated: {lastRefreshed.toLocaleTimeString()}
+                        </span>
+                    )}
+                    <button
+                        className={`refresh-button ${isRefreshing ? 'refreshing' : ''}`}
+                        onClick={onRefresh}
+                        disabled={isRefreshing}
+                    >
+                        ↻
+                    </button>
+                </div>
+            </div>
             <table className="requests-table">
                 <thead>
                 <tr>
