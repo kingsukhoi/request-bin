@@ -21,9 +21,8 @@ function App() {
             const requests = await GetRequests()
             setRequests(requests)
             setLastRefreshed(new Date())
-            setIsRefreshing(false)
-        } catch {
-            setIsRefreshing(false)
+        } finally {
+          setIsRefreshing(false)
         }
     }, [isRefreshing])
 
@@ -37,10 +36,7 @@ function App() {
     }, [refreshRequests])
 
     useEffect(() => {
-        const loadInitialData = async () => {
-            await refreshRequests()
-        }
-        loadInitialData()
+        refreshRequests()
     }, [])//leave that empty or it spams the server
 
 
@@ -48,7 +44,7 @@ function App() {
         <div className="app-container">
             <header className="app-header">
                 <h1>Request Bin</h1>
-                <p>Monitor and inspect HTTP requests in real-time</p>
+                <p>Monitor and inspect HTTP requests</p>
             </header>
 
             <main className="main-content">
@@ -58,6 +54,7 @@ function App() {
                     onRefresh={debouncedRefresh}
                     lastRefreshed={lastRefreshed}
                     isRefreshing={isRefreshing}
+                    selectedRequest={selectedRequest}
                 />
 
                 {selectedRequest && (

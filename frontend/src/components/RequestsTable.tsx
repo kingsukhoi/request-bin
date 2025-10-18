@@ -6,9 +6,10 @@ interface RequestsTableProps {
     onRefresh: () => void
     lastRefreshed: Date | null
     isRefreshing: boolean
+    selectedRequest: Request | null
 }
 
-export function RequestsTable({requests, onSelectRequest, onRefresh, lastRefreshed, isRefreshing}: RequestsTableProps) {
+export function RequestsTable({requests, onSelectRequest, onRefresh, lastRefreshed, isRefreshing, selectedRequest}: RequestsTableProps) {
     const getMethodColor = (method: string) => {
         const colors: Record<string, string> = {
             GET: '#61affe',
@@ -49,19 +50,22 @@ export function RequestsTable({requests, onSelectRequest, onRefresh, lastRefresh
                     <th>Path</th>
                     <th>Timestamp</th>
                     <th>IP Address</th>
-                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {requests.length === 0 ? (
                     <tr>
-                        <td colSpan={5} className="empty-state">
+                        <td colSpan={4} className="empty-state">
                             No requests yet. Start sending requests to your bin!
                         </td>
                     </tr>
                 ) : (
                     requests.map((request) => (
-                        <tr key={request.id}>
+                        <tr
+                            key={request.id}
+                            onClick={() => onSelectRequest(request)}
+                            className={selectedRequest?.id === request.id ? 'selected-row' : ''}
+                        >
                             <td>
                   <span
                       className="method-badge"
@@ -73,14 +77,6 @@ export function RequestsTable({requests, onSelectRequest, onRefresh, lastRefresh
                             <td className="path-cell">{request.path}</td>
                             <td>{request.timestamp.toLocaleString()}</td>
                             <td>{request.sourceIp}</td>
-                            <td>
-                                <button
-                                    className="view-button"
-                                    onClick={() => onSelectRequest(request)}
-                                >
-                                    View Details
-                                </button>
-                            </td>
                         </tr>
                     ))
                 )}

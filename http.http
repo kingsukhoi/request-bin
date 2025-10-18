@@ -37,6 +37,20 @@ Accept: application/json
 
 {"somedata": true}
 
+### GET test resp code
+POST http://localhost:8080/respCode/400
+Accept: application/xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<note>
+  <to>Tove</to>
+  <from>Jani</from>
+  <heading>Reminder</heading>
+  <body>Don't forget me this weekend!</body>
+</note>
+
+
+
 ### GET requests
 GET http://localhost:8080/rbv1/requests
 Accept: application/json

@@ -39,6 +39,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   flex: 1;
   min-width: 0;
+  overflow-x: auto;
 }
 
 .requests-header {
@@ -105,7 +106,7 @@
   border-collapse: collapse;
   background: #0d1117;
   border-radius: 8px;
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 .requests-table thead {
@@ -123,10 +124,16 @@
 .requests-table tbody tr {
   border-bottom: 1px solid #30363d;
   transition: background-color 0.2s;
+  cursor: pointer;
 }
 
 .requests-table tbody tr:hover {
   background: #161b22;
+}
+
+.requests-table tbody tr.selected-row {
+  background: #1f2937;
+  border-left: 3px solid #3b82f6;
 }
 
 .requests-table td {
@@ -230,6 +237,40 @@
   margin-top: 0;
   margin-bottom: 0.75rem;
   font-size: 1.125rem;
+}
+
+.section-header-with-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.section-header-with-button h3 {
+  margin-bottom: 0;
+}
+
+.copy-button {
+  background: #238636;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.copy-button:hover {
+  background: #2ea043;
+}
+
+.copy-button:active {
+  transform: scale(0.95);
 }
 
 .detail-section p {

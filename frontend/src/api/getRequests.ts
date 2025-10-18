@@ -29,7 +29,7 @@ export async function GetRequests() {
     return res.map(req => ({
         ...req,
         timestamp: new Date(req.timestamp),
-        content: atob(req.content)
+        content: req.content ? atob(req.content) : null,
     })) as Request[]
 
 }

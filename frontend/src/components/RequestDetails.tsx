@@ -4,7 +4,8 @@ import {GetQueryParams} from "../api/getQueryParams.ts";
 import {useEffect, useState} from "react";
 import type {Header} from "../api/getHeaders.ts";
 import type {QueryParam} from "../api/getQueryParams.ts";
-import ReactJson from 'react-json-view';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { vs2015 } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 interface RequestDetailsProps {
     request: Request
@@ -15,11 +16,24 @@ export function RequestDetails({request, onClose}: RequestDetailsProps) {
 
     const [headers, setHeaders] = useState<Header[]>([])
     const [queryParams, setQueryParams] = useState<QueryParam[]>([])
+    const [copied, setCopied] = useState(false)
 
     useEffect(() => {
         GetHeaders(request.id).then(setHeaders)
         GetQueryParams(request.id).then(setQueryParams)
     }, [request.id])
+
+    const copyToClipboard = async () => {
+        if (!request.content) return
+
+        try {
+            await navigator.clipboard.writeText(request.content)
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+        } catch (err) {
+            console.error('Failed to copy:', err)
+        }
+    }
 
 
     return (
@@ -49,7 +63,7 @@ export function RequestDetails({request, onClose}: RequestDetailsProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {headers.map((header, index) => (
+                            {headers.sort().map((header, index) => (
                                 <tr key={index}>
                                     <td>{header.name}</td>
                                     <td>{header.value}</td>
@@ -70,7 +84,7 @@ export function RequestDetails({request, onClose}: RequestDetailsProps) {
                         </thead>
                         <tbody>
                             {queryParams.length > 0 ? (
-                                queryParams.map((param, index) => (
+                                queryParams.sort().map((param, index) => (
                                     <tr key={index}>
                                         <td>{param.name}</td>
                                         <td>{param.value}</td>
@@ -89,21 +103,39 @@ export function RequestDetails({request, onClose}: RequestDetailsProps) {
 
                 {request.content && (
                     <div className="detail-section">
-                        <h3>Body</h3>
-                        <ReactJson
-                            src={JSON.parse(request.content)}
-                            theme="monokai"
-                            collapsed={false}
-                            displayDataTypes={false}
-                            displayObjectSize={false}
-                            enableClipboard={true}
-                            style={{
+                        <div className="section-header-with-button">
+                            <h3>Body</h3>
+                            <button
+                                className="copy-button"
+                                onClick={copyToClipboard}
+                                title="Copy to clipboard"
+                            >
+                                {copied ? '✓ Copied' : '📋 Copy'}
+                            </button>
+                        </div>
+                        <SyntaxHighlighter
+                            style={vs2015}
+                            wrapLongLines={true}
+                            showLineNumbers={true}
+                            showInlineLineNumbers={true}
+                            customStyle={{
                                 background: '#0d1117',
                                 padding: '1rem',
                                 borderRadius: '6px',
-                                border: '1px solid #30363d'
+                                border: '1px solid #30363d',
+                                margin: 0
                             }}
-                        />
+                        >
+                            {(() => {
+                                try {
+                                    // Try to pretty-print JSON
+                                    return JSON.stringify(JSON.parse(request.content), null, 2);
+                                } catch {
+                                    // Return as-is for other formats
+                                    return request.content;
+                                }
+                            })()}
+                        </SyntaxHighlighter>
                     </div>
                 )}
             </div>
