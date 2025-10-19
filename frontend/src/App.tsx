@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback, useRef} from 'react'
+import {useState, useEffect, useCallback} from 'react'
 import './App.css'
 import {RequestsTable} from './components/RequestsTable'
 import {RequestDetails} from './components/RequestDetails'
@@ -11,7 +11,6 @@ function App() {
     const [selectedRequest, setSelectedRequest] = useState<Request | null>(null)
     const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null)
     const [isRefreshing, setIsRefreshing] = useState(false)
-    const debounceRef = useRef<number | null>(null)
 
     const refreshRequests = useCallback(async () => {
         if (isRefreshing) return
@@ -25,15 +24,6 @@ function App() {
           setIsRefreshing(false)
         }
     }, [isRefreshing])
-
-    const debouncedRefresh = useCallback(() => {
-        if (debounceRef.current) {
-            clearTimeout(debounceRef.current)
-        }
-        debounceRef.current = setTimeout(() => {
-            refreshRequests()
-        }, 300)
-    }, [refreshRequests])
 
     useEffect(() => {
         refreshRequests()
@@ -51,7 +41,7 @@ function App() {
                 <RequestsTable
                     requests={requests}
                     onSelectRequest={setSelectedRequest}
-                    onRefresh={debouncedRefresh}
+                    onRefresh={refreshRequests}
                     lastRefreshed={lastRefreshed}
                     isRefreshing={isRefreshing}
                     selectedRequest={selectedRequest}
