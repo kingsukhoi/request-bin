@@ -19,7 +19,7 @@ limit $1;
 -- name: GetRequestsPaged :many
 select id, method, content, source_ip, response_code, timestamp, path
 from requests
-where id > $1
+where id < $1
 order by timestamp desc
 limit $2;
 
