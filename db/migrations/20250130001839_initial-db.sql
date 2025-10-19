@@ -1,6 +1,4 @@
 -- migrate:up
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE IF NOT EXISTS "requests"
 (
     id       uuid primary key,
