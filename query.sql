@@ -12,7 +12,16 @@ values ($1, $2, $3);
 
 -- name: GetRequests :many
 select id, method, content, source_ip, response_code, timestamp, path
-from requests;
+from requests
+order by timestamp desc
+limit $1;
+
+-- name: GetRequestsPaged :many
+select id, method, content, source_ip, response_code, timestamp, path
+from requests
+where id > $1
+order by timestamp desc
+limit $2;
 
 -- name: GetHeadersById :many
 select request_id, name, value

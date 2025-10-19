@@ -157,10 +157,53 @@ func (q *Queries) GetQueryParamsById(ctx context.Context, requestID uuid.UUID) (
 const getRequests = `-- name: GetRequests :many
 select id, method, content, source_ip, response_code, timestamp, path
 from requests
+order by timestamp desc
+limit $1
 `
 
-func (q *Queries) GetRequests(ctx context.Context) ([]Request, error) {
-	rows, err := q.db.Query(ctx, getRequests)
+func (q *Queries) GetRequests(ctx context.Context, limit int32) ([]Request, error) {
+	rows, err := q.db.Query(ctx, getRequests, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Request{}
+	for rows.Next() {
+		var i Request
+		if err := rows.Scan(
+			&i.ID,
+			&i.Method,
+			&i.Content,
+			&i.SourceIp,
+			&i.ResponseCode,
+			&i.Timestamp,
+			&i.Path,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getRequestsPaged = `-- name: GetRequestsPaged :many
+select id, method, content, source_ip, response_code, timestamp, path
+from requests
+where id > $1
+order by timestamp desc
+limit $2
+`
+
+type GetRequestsPagedParams struct {
+	ID    uuid.UUID `json:"id"`
+	Limit int32     `json:"limit"`
+}
+
+func (q *Queries) GetRequestsPaged(ctx context.Context, arg GetRequestsPagedParams) ([]Request, error) {
+	rows, err := q.db.Query(ctx, getRequestsPaged, arg.ID, arg.Limit)
 	if err != nil {
 		return nil, err
 	}

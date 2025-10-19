@@ -49,10 +49,12 @@ Accept: application/xml
   <body>Don't forget me this weekend!</body>
 </note>
 
-
-
 ### GET requests
 GET http://localhost:8080/rbv1/requests
+Accept: application/json
+
+### GET requests next token
+GET http://localhost:8080/rbv1/requests?next_token='0199fa59-8b6b-7182-b333-6cd5739b269f'
 Accept: application/json
 
 ### GET headers by id
