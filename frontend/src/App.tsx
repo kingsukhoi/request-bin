@@ -49,7 +49,9 @@ function App() {
         if (requests.length > 0) {
             const lastRequestId = requests[requests.length - 1].id
             // Store current token so we can go back
-            setPreviousTokens([...previousTokens, currentToken])
+            if (currentToken !== undefined) {
+                setPreviousTokens([...previousTokens, currentToken])
+            }
             refreshRequests(lastRequestId)
         }
     }
