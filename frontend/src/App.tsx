@@ -15,7 +15,7 @@ function App() {
 
     const [pageSize, setPageSize] = useState(20)
     const [currentToken, setCurrentToken] = useState<string | undefined>(undefined)
-    const [previousTokens, setPreviousTokens] = useState<string[]>([])
+    const [previousTokens, setPreviousTokens] = useState<(string | undefined)[]>([])
 
     const refreshRequests = useCallback(async (token?: string) => {
         if (isRefreshing) return
@@ -49,9 +49,7 @@ function App() {
         if (requests.length > 0) {
             const lastRequestId = requests[requests.length - 1].id
             // Store current token so we can go back
-            if (currentToken !== undefined) {
-                setPreviousTokens([...previousTokens, currentToken])
-            }
+            setPreviousTokens([...previousTokens, currentToken])
             refreshRequests(lastRequestId)
         }
     }
