@@ -7,9 +7,9 @@ import {RequestDetails} from '../components/RequestDetails'
 import {PaginationBar} from '../components/PaginationBar'
 import {GetRequests, type Request} from "../api"
 
-export function Index() {
+export function ViewRequests() {
     const navigate = useNavigate()
-    const { request_id } = useSearch({ from: '/' })
+    const { request_id, nextToken } = useSearch({ from: '/viewRequests' })
 
     const [requests, setRequests] = useState<Request[]>([])
 
@@ -18,7 +18,7 @@ export function Index() {
     const [isRefreshing, setIsRefreshing] = useState(false)
 
     const [pageSize, setPageSize] = useState(20)
-    const [currentToken, setCurrentToken] = useState<string | undefined>(undefined)
+    const [currentToken, setCurrentToken] = useState<string | undefined>(nextToken)
     const [previousTokens, setPreviousTokens] = useState<(string | undefined)[]>([])
 
     const refreshRequests = useCallback(async (token?: string) => {
@@ -33,13 +33,20 @@ export function Index() {
             setRequests(requestsData)
             setCurrentToken(token)
             setLastRefreshed(new Date())
+
+            // Update URL with current token
+            navigate({
+                to: '/viewRequests',
+                search: { request_id, nextToken: token },
+                replace: true
+            })
         } finally {
           setIsRefreshing(false)
         }
-    }, [isRefreshing, pageSize])
+    }, [isRefreshing, pageSize, navigate, request_id])
 
     useEffect(() => {
-        refreshRequests()
+        refreshRequests(nextToken)
     }, [])//leave that empty or it spams the server
 
     useEffect(() => {
@@ -97,15 +104,15 @@ export function Index() {
 
     const handleSelectRequest = (request: Request) => {
         navigate({
-            to: '/',
-            search: { request_id: request.id }
+            to: '/viewRequests',
+            search: { request_id: request.id, nextToken: currentToken }
         })
     }
 
     const handleCloseRequest = () => {
         navigate({
-            to: '/',
-            search: { request_id: undefined }
+            to: '/viewRequests',
+            search: { request_id: undefined, nextToken: currentToken }
         })
     }
 

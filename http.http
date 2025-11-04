@@ -58,6 +58,9 @@ Content-Type: application/json
   "password": "farsos-be-testing"
 }
 
+### GET check auth
+GET http://localhost:8080/rbv1/checkAuth
+
 ### GET requests
 GET http://localhost:8080/rbv1/requests
 Accept: application/json
