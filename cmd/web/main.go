@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"log/slog"
 	"os"
 
 	"github.com/gin-gonic/gin"
 	dbMigrations "github.com/kingsukhoi/request-bin"
+	"github.com/kingsukhoi/request-bin/pkg/authentication"
 	"github.com/kingsukhoi/request-bin/pkg/conf"
 	"github.com/kingsukhoi/request-bin/pkg/db"
 	"github.com/kingsukhoi/request-bin/pkg/router"
@@ -32,6 +34,18 @@ func main() {
 	}
 
 	_ = db.MustGetDatabase() //start up the pool before gin
+
+	err = authentication.InitUsers(context.Background())
+	if err != nil {
+		slog.Error("Error initializing users", "error", err)
+		os.Exit(1)
+	}
+
+	err = authentication.InitKeys(context.Background())
+	if err != nil {
+		slog.Error("Error initializing keys", "error", err)
+		os.Exit(1)
+	}
 
 	r := router.CreateRouter()
 

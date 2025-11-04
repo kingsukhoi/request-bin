@@ -9,6 +9,12 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type JwtKey struct {
+	ID         uuid.UUID `json:"id"`
+	PublicKey  string    `json:"publicKey"`
+	PrivateKey string    `json:"privateKey"`
+}
+
 type Request struct {
 	ID           uuid.UUID          `json:"id"`
 	Method       pgtype.Text        `json:"method"`
@@ -29,4 +35,9 @@ type RequestQueryParameter struct {
 	RequestID uuid.UUID   `json:"requestId"`
 	Name      string      `json:"name"`
 	Value     pgtype.Text `json:"value"`
+}
+
+type User struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }

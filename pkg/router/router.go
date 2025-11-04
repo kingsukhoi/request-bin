@@ -51,9 +51,10 @@ func CreateRouter() *gin.Engine {
 	azureGroup.OPTIONS("/eventGrid", routes.EventGridOptions)
 
 	v1Group := r.Group("/rbv1")
-	v1Group.GET("/requests", routes.GetRequests)
-	v1Group.GET("/requests/headers", routes.GetHeaders)
-	v1Group.GET("/requests/queryParams", routes.GetQueryParams)
+	v1Group.GET("/requests", routes.AuthMiddleware, routes.GetRequests)
+	v1Group.GET("/requests/headers", routes.AuthMiddleware, routes.GetHeaders)
+	v1Group.GET("/requests/queryParams", routes.AuthMiddleware, routes.GetQueryParams)
+	v1Group.POST("/login", routes.LoginHandler)
 
 	for _, cPath := range customPaths {
 		cPath = strings.TrimSpace(cPath)

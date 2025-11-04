@@ -40,3 +40,31 @@ from request_headers;
 -- name: GetQueryParams :many
 select request_id, name, value
 from request_query_parameters;
+
+-- name: GetAllUsers :many
+select *
+from users;
+
+-- name: GetUser :one
+select *
+from users
+where username = $1;
+
+-- name: UpdateUserPassword :exec
+update users
+set password = $1
+where username = $2;
+
+-- name: CreateUser :exec
+insert into users (username, password)
+values ($1, $2);
+
+-- name: GetLatestKey :one
+select *
+from jwt_keys
+order by id desc
+limit 1;
+
+-- name: CreateKey :exec
+insert into jwt_keys (id, public_key, private_key)
+values ($1, $2, $3);

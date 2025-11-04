@@ -18,6 +18,22 @@ type CreateHeadersParams struct {
 	Value     pgtype.Text `json:"value"`
 }
 
+const createKey = `-- name: CreateKey :exec
+insert into jwt_keys (id, public_key, private_key)
+values ($1, $2, $3)
+`
+
+type CreateKeyParams struct {
+	ID         uuid.UUID `json:"id"`
+	PublicKey  string    `json:"publicKey"`
+	PrivateKey string    `json:"privateKey"`
+}
+
+func (q *Queries) CreateKey(ctx context.Context, arg CreateKeyParams) error {
+	_, err := q.db.Exec(ctx, createKey, arg.ID, arg.PublicKey, arg.PrivateKey)
+	return err
+}
+
 type CreateQueryParametersParams struct {
 	RequestID uuid.UUID   `json:"requestId"`
 	Name      string      `json:"name"`
@@ -50,6 +66,46 @@ func (q *Queries) CreateRequest(ctx context.Context, arg CreateRequestParams) er
 		arg.Path,
 	)
 	return err
+}
+
+const createUser = `-- name: CreateUser :exec
+insert into users (username, password)
+values ($1, $2)
+`
+
+type CreateUserParams struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
+	_, err := q.db.Exec(ctx, createUser, arg.Username, arg.Password)
+	return err
+}
+
+const getAllUsers = `-- name: GetAllUsers :many
+select username, password
+from users
+`
+
+func (q *Queries) GetAllUsers(ctx context.Context) ([]User, error) {
+	rows, err := q.db.Query(ctx, getAllUsers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []User{}
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(&i.Username, &i.Password); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getHeaders = `-- name: GetHeaders :many
@@ -101,6 +157,20 @@ func (q *Queries) GetHeadersById(ctx context.Context, requestID uuid.UUID) ([]Re
 		return nil, err
 	}
 	return items, nil
+}
+
+const getLatestKey = `-- name: GetLatestKey :one
+select id, public_key, private_key
+from jwt_keys
+order by id desc
+limit 1
+`
+
+func (q *Queries) GetLatestKey(ctx context.Context) (JwtKey, error) {
+	row := q.db.QueryRow(ctx, getLatestKey)
+	var i JwtKey
+	err := row.Scan(&i.ID, &i.PublicKey, &i.PrivateKey)
+	return i, err
 }
 
 const getQueryParams = `-- name: GetQueryParams :many
@@ -228,4 +298,33 @@ func (q *Queries) GetRequestsPaged(ctx context.Context, arg GetRequestsPagedPara
 		return nil, err
 	}
 	return items, nil
+}
+
+const getUser = `-- name: GetUser :one
+select username, password
+from users
+where username = $1
+`
+
+func (q *Queries) GetUser(ctx context.Context, username string) (User, error) {
+	row := q.db.QueryRow(ctx, getUser, username)
+	var i User
+	err := row.Scan(&i.Username, &i.Password)
+	return i, err
+}
+
+const updateUserPassword = `-- name: UpdateUserPassword :exec
+update users
+set password = $1
+where username = $2
+`
+
+type UpdateUserPasswordParams struct {
+	Password string `json:"password"`
+	Username string `json:"username"`
+}
+
+func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error {
+	_, err := q.db.Exec(ctx, updateUserPassword, arg.Password, arg.Username)
+	return err
 }

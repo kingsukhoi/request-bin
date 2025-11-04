@@ -49,6 +49,15 @@ Accept: application/xml
   <body>Don't forget me this weekend!</body>
 </note>
 
+### POST test login
+POST localhost:8080/rbv1/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "farsos-be-testing"
+}
+
 ### GET requests
 GET http://localhost:8080/rbv1/requests
 Accept: application/json
