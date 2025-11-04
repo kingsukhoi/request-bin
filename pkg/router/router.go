@@ -42,12 +42,12 @@ func CreateRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 
 	r.GET("/healthz", routes.HealthCheck)
-
-	r.Any("/bin", routes.DefaultRoute)
-	r.Any("/respCode/:code", routes.ResponseCode)
 	r.GET("/robots.txt", func(c *gin.Context) {
 		c.String(http.StatusOK, "User-agent: *\nDisallow: /")
 	})
+
+	r.Any("/bin", routes.DefaultRoute)
+	r.Any("/respCode/:code", routes.ResponseCode)
 
 	azureGroup := r.Group("/azure")
 	azureGroup.POST("/eventGrid", routes.DefaultRoute)
