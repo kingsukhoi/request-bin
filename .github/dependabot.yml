@@ -23,3 +23,12 @@ updates:
         applies-to: version-updates
         patterns:
           - "*"
+  - package-ecosystem: "npm" # See documentation for possible values
+    directory: "/frontend" # Location of package manifest
+    schedule:
+      interval: "weekly"
+    groups:
+      pnpm-deps:
+        applies-to: version-updates
+        patterns:
+          - "*"
