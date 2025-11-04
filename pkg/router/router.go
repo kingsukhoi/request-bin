@@ -55,6 +55,9 @@ func CreateRouter() *gin.Engine {
 	v1Group.GET("/requests/headers", routes.AuthMiddleware, routes.GetHeaders)
 	v1Group.GET("/requests/queryParams", routes.AuthMiddleware, routes.GetQueryParams)
 	v1Group.POST("/login", routes.LoginHandler)
+	v1Group.GET("/checkAuth", routes.AuthMiddleware, func(c *gin.Context) {
+		c.Status(http.StatusOK)
+	})
 
 	for _, cPath := range customPaths {
 		cPath = strings.TrimSpace(cPath)
