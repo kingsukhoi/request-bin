@@ -101,12 +101,23 @@ func InitKeys(ctx context.Context) error {
 		return err
 	}
 
-	return queries.CreateKey(ctx, sqlc.CreateKeyParams{
+	err = queries.CreateKey(ctx, sqlc.CreateKeyParams{
 		ID:         keyId,
 		PrivateKey: string(privateKeyPEM),
 		PublicKey:  string(publicKeyPEM),
 	})
 
+	if err != nil {
+		return err
+	}
+
+	currKey = &CurrKey{
+		KeyId:      keyId,
+		PrivateKey: privateKey,
+		PublicKey:  &privateKey.PublicKey,
+	}
+
+	return nil
 }
 
 func getCurrentKey() *CurrKey {
