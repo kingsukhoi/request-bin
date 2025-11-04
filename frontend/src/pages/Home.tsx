@@ -11,10 +11,14 @@ export function Home() {
 
       if (isAuthenticated) {
         navigate({
-          to: '/viewRequests'
+          to: '/viewRequests',
+          search: {
+            request_id: undefined,
+            nextToken: undefined
+          }
         })
       } else {
-        navigate({to: '/login'})
+        navigate({to: '/login', search: {redirect: undefined}})
       }
     }
 
