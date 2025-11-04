@@ -79,9 +79,10 @@ jobs:
       - name: Run Trivy scanner
         uses: aquasecurity/trivy-action@0.33.1
         with:
-          image-ref: "ghcr.io/${{github.repository}}:${{ github.sha }}"
+          scan-type: 'fs'
           output: trivy.txt
           ignore-unfixed: true
+          version: 'latest'
       - name: Publish Trivy Output to Summary
         run: |
           if [[ -s trivy.txt ]]; then
