@@ -299,6 +299,19 @@
   line-height: 1.5;
 }
 
+.detail-section pre {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  margin: 0 !important;
+}
+
+.detail-section code {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+}
+
 .headers-table {
   width: 100%;
   border-collapse: collapse;
