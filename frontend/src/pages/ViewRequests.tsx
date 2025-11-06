@@ -1,6 +1,5 @@
 import {useCallback, useEffect, useState} from 'react'
-import { useSearch, useNavigate } from '@tanstack/react-router'
-import '../App.css'
+import {useNavigate, useSearch} from '@tanstack/react-router'
 import {Banner} from '../components/Banner'
 import {RequestsTable} from '../components/RequestsTable'
 import {RequestDetails} from '../components/RequestDetails'
@@ -117,11 +116,11 @@ export function ViewRequests() {
     }
 
     return (
-        <div className="app-container">
+        <div className="min-h-screen bg-gh-bg-primary">
             <Banner title="Request Bin" subtitle="Monitor and inspect HTTP requests" />
 
-            <main className="main-content">
-                <div className="requests-section">
+            <main className="max-w-[1800px] mx-auto md:p-8 p-4 flex md:flex-row flex-col md:gap-8 gap-4 items-start">
+                <div className="flex-1 min-w-0 flex flex-col gap-4 w-full">
                     <RequestsTable
                         requests={requests}
                         onSelectRequest={handleSelectRequest}

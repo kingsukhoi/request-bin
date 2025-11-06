@@ -25,17 +25,17 @@ export function RequestsTable({requests, onSelectRequest, onRefresh, lastRefresh
 
 
     return (
-        <div className="requests-table-container">
-            <div className="requests-header">
-                <h2>Incoming Requests</h2>
-                <div className="refresh-section">
+        <div className="bg-gh-bg-secondary rounded-lg p-6 shadow-lg flex-1 min-w-0 overflow-x-auto">
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="m-0 text-gh-text-primary text-2xl">Incoming Requests</h2>
+                <div className="flex items-center gap-4">
                     {lastRefreshed && (
-                        <span className="last-refreshed">
+                        <span className="text-gh-text-muted text-sm">
                             Last updated: {lastRefreshed.toLocaleTimeString()}
                         </span>
                     )}
                     <button
-                        className={`refresh-button ${isRefreshing ? 'refreshing' : ''}`}
+                        className={`bg-gh-success text-white border-none w-10 h-10 rounded-md cursor-pointer text-xl font-medium transition-colors flex items-center justify-center hover:bg-gh-success-hover disabled:bg-gray-500 disabled:cursor-not-allowed ${isRefreshing ? 'animate-spin' : ''}`}
                         onClick={onRefresh}
                         disabled={isRefreshing}
                     >
@@ -43,19 +43,21 @@ export function RequestsTable({requests, onSelectRequest, onRefresh, lastRefresh
                     </button>
                 </div>
             </div>
-            <table className="requests-table">
-                <thead>
+            <table className="w-full border-collapse bg-gh-bg-primary rounded-lg overflow-x-auto">
+                <thead className="bg-gh-bg-tertiary">
                 <tr>
-                    <th>Method</th>
-                    <th>Path</th>
-                    <th>Timestamp</th>
-                    <th>IP Address</th>
+                    <th className="p-4 text-left font-semibold text-gh-text-primary border-b-2 border-gh-border">Method</th>
+                    <th className="p-4 text-left font-semibold text-gh-text-primary border-b-2 border-gh-border">Path</th>
+                    <th className="p-4 text-left font-semibold text-gh-text-primary border-b-2 border-gh-border">Timestamp</th>
+                    <th className="p-4 text-left font-semibold text-gh-text-primary border-b-2 border-gh-border">IP
+                        Address
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
                 {requests.length === 0 ? (
                     <tr>
-                        <td colSpan={4} className="empty-state">
+                        <td colSpan={4} className="text-center p-12 text-gh-text-muted italic">
                             No requests yet. Start sending requests to your bin!
                         </td>
                     </tr>
@@ -64,19 +66,20 @@ export function RequestsTable({requests, onSelectRequest, onRefresh, lastRefresh
                         <tr
                             key={request.id}
                             onClick={() => onSelectRequest(request)}
-                            className={selectedRequest?.id === request.id ? 'selected-row' : ''}
+                            className={`border-b border-gh-border transition-colors cursor-pointer hover:bg-gh-bg-secondary ${selectedRequest?.id === request.id ? 'bg-gh-bg-tertiary' : ''}`}
+                            style={selectedRequest?.id === request.id ? {boxShadow: 'inset 3px 0 0 #3b82f6'} : undefined}
                         >
-                            <td>
+                            <td className="p-4 text-gh-text-secondary">
                   <span
-                      className="method-badge"
+                      className="inline-block px-3 py-1 rounded font-semibold text-sm text-white uppercase"
                       style={{backgroundColor: getMethodColor(request.method)}}
                   >
                     {request.method}
                   </span>
                             </td>
-                            <td className="path-cell">{request.path}</td>
-                            <td>{request.timestamp.toLocaleString()}</td>
-                            <td>{request.sourceIp}</td>
+                            <td className="p-4 text-gh-text-secondary font-mono text-gh-accent">{request.path}</td>
+                            <td className="p-4 text-gh-text-secondary">{request.timestamp.toLocaleString()}</td>
+                            <td className="p-4 text-gh-text-secondary">{request.sourceIp}</td>
                         </tr>
                     ))
                 )}

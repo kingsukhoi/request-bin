@@ -27,14 +27,9 @@ export function Home() {
 
   // Show a loading state while checking auth
   return (
-    <div className="app-container">
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh'
-      }}>
-        <p>Loading...</p>
+      <div className="min-h-screen bg-gh-bg-primary">
+          <div className="flex justify-center items-center h-screen">
+              <p className="text-gh-text-primary">Loading...</p>
       </div>
     </div>
   )
