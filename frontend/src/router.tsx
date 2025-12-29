@@ -1,22 +1,23 @@
-import {createRouter, createRootRoute, createRoute} from '@tanstack/react-router'
+import {createRouter, createRootRoute, createRoute, redirect} from '@tanstack/react-router'
 import App from './App'
 import {ViewRequests} from './pages/ViewRequests.tsx'
 import {Login} from './pages/Login'
 import {Home} from './pages/Home'
+import {checkAuth} from './api'
 
 // Define the root route
 const rootRoute = createRootRoute({
     component: App
 })
 
-// Define the home route
+// Define the home route - redirects to /viewRequests
 const homeRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/',
     component: Home,
 })
 
-// Define the view requests route with search params
+// Define the view requests route with search params and auth check
 const viewRequestsRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/viewRequests',
@@ -25,6 +26,18 @@ const viewRequestsRoute = createRoute({
         return {
             request_id: (search.request_id as string) || undefined,
             nextToken: (search.nextToken as string) || undefined,
+        }
+    },
+    beforeLoad: async () => {
+        const isAuthenticated = await checkAuth()
+        if (!isAuthenticated) {
+            const currentPath = window.location.pathname + window.location.search
+            throw redirect({
+                to: '/login',
+                search: {
+                    redirect: currentPath,
+                },
+            })
         }
     },
 })
