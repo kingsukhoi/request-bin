@@ -4,69 +4,67 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/kingsukhoi/request-bin/pkg/authentication"
+	"github.com/labstack/echo/v5"
 )
 
 const CookieName = "auth-token"
 
-func AuthMiddleware(c *gin.Context) {
-	currJwt, err := c.Cookie(CookieName)
-	if err != nil {
-		c.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
+func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c *echo.Context) error {
+		currJwt, err := c.Cookie(CookieName)
+		if err != nil {
+			return err
+		}
 
-	valid, err := authentication.VerifyJwt(currJwt)
-	if err != nil {
-		slog.Error("Error while verifying jwt", "error", err)
-		c.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
+		valid, err := authentication.VerifyJwt(currJwt.Value)
+		if err != nil {
+			return err
+		}
 
-	if !valid {
-		c.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
+		if !valid {
+			return echo.ErrUnauthorized
+		}
 
-	c.Next()
+		return next(c)
+	}
 }
 
-func LoginHandler(c *gin.Context) {
+func LoginHandler(c *echo.Context) error {
 	var loginData struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
 	}
-
-	if err := c.ShouldBindJSON(&loginData); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
-		return
+	err := c.Bind(&loginData)
+	if err != nil {
+		return err
 	}
 
-	valid, err := authentication.VerifyPassword(c.Request.Context(), loginData.Username, loginData.Password)
+	valid, err := authentication.VerifyPassword(c.Request().Context(), loginData.Username, loginData.Password)
 	if err != nil {
 		slog.Error("Error verifying password", "error", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid username or password"})
-		return
+		return echo.NewHTTPError(http.StatusUnauthorized, "Error verifying password")
 	}
 
 	if !valid {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
-		return
+		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid username or password")
 	}
 
 	token, err := authentication.GenJwt(loginData.Username)
 	if err != nil {
 		slog.Error("Error generating token", "error", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid username or password"})
-		return
+		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid username or password")
 	}
 
-	secure := false
-
-	if gin.Mode() == gin.ReleaseMode {
-		secure = true
+	cookie := &http.Cookie{
+		Name:     CookieName,
+		Value:    token,
+		Path:     "/rbv1",
+		Secure:   true,
+		HttpOnly: true,
+		MaxAge:   43200,
 	}
 
-	c.SetCookie(CookieName, token, 43200, "/rbv1", "", secure, true)
+	c.SetCookie(cookie)
+	return nil
 }

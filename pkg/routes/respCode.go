@@ -3,39 +3,33 @@ package routes
 import (
 	"log/slog"
 	"net/http"
-	"strconv"
 
-	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/labstack/echo/v5"
 )
 
-func ResponseCode(c *gin.Context) {
-	respCodeString := c.Param("code")
-	respCode, err := strconv.Atoi(respCodeString)
+func ResponseCode(c *echo.Context) error {
+	respCode, err := echo.PathParam[int](c, "code")
 	if err != nil {
-		c.JSON(400, gin.H{"error": "invalid response code"})
-		slog.Error("Error parsing response code", "error", err)
-		return
+		slog.Error("Error getting code", "error", err)
+		return err
 	}
 
 	if respCode < 100 || respCode > 599 {
-		c.JSON(400, gin.H{"error": "invalid response code"})
 		slog.Error("Invalid response code", "code", respCode)
-		return
+		return echo.NewHTTPError(400, "invalid response code")
 	}
 
 	currUUid, err := uuid.NewV7()
 	if err != nil {
 		slog.Error("Error generating uuid", "error", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
-		return
+		return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
 	}
 
-	err = handleRequest(c.Request.Context(), currUUid, respCode, c.Request)
+	err = handleRequest(c.Request().Context(), currUUid, respCode, c.Request())
 	if err != nil {
-		c.JSON(500, gin.H{"error": "error handling request"})
 		slog.Error("Error handling request", "error", err)
-		return
+		return echo.NewHTTPError(http.StatusInternalServerError, "error handling request")
 	}
-	c.Status(respCode)
+	return c.NoContent(respCode)
 }

@@ -2,22 +2,20 @@ package routes
 
 import (
 	"log/slog"
+	"net/http"
 
 	"github.com/kingsukhoi/request-bin/pkg/db"
-
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v5"
 )
 
-func HealthCheck(c *gin.Context) {
+func HealthCheck(c *echo.Context) error {
 	pool := db.MustGetDatabase()
 
-	err := pool.Ping(c.Request.Context())
+	err := pool.Ping(c.Request().Context())
 	if err != nil {
-		c.JSON(500, gin.H{"error": "database connection error"})
 		slog.Error("Error pinging database", "error", err)
-		return
+		return echo.NewHTTPError(http.StatusInternalServerError, "Error pinging database")
 	}
 
-	c.JSON(200, gin.H{"status": "ok"})
-
+	return c.JSON(200, map[string]any{"status": "ok"})
 }

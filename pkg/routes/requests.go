@@ -11,10 +11,9 @@ import (
 	db2 "github.com/kingsukhoi/request-bin/pkg/db"
 	"github.com/kingsukhoi/request-bin/pkg/helpers"
 	"github.com/kingsukhoi/request-bin/pkg/sqlc"
+	"github.com/labstack/echo/v5"
 
-	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -28,12 +27,7 @@ func handleRequest(ctx context.Context, currUUid uuid.UUID, respCode int, req *h
 	if err != nil {
 		return err
 	}
-	defer func(tx pgx.Tx, ctx context.Context) {
-		errC := tx.Rollback(ctx)
-		if errC != nil {
-			slog.Error("Error rolling back transaction", "error", errC)
-		}
-	}(tx, ctx)
+	defer tx.Rollback(ctx)
 
 	queries := sqlc.New(db).WithTx(tx)
 
@@ -123,20 +117,18 @@ func handleRequest(ctx context.Context, currUUid uuid.UUID, respCode int, req *h
 	return nil
 }
 
-func DefaultRoute(c *gin.Context) {
+func DefaultRoute(c *echo.Context) error {
 
 	currUUid, err := uuid.NewV7()
 	if err != nil {
 		slog.Error("Error generating uuid", "error", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
-		return
+		return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
 	}
 
-	err = handleRequest(c.Request.Context(), currUUid, http.StatusOK, c.Request)
+	err = handleRequest(c.Request().Context(), currUUid, http.StatusOK, c.Request())
 	if err != nil {
 		slog.Error("Error handling request", "error", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
-		return
+		return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
 	}
-	c.Status(http.StatusOK)
+	return c.NoContent(http.StatusOK)
 }

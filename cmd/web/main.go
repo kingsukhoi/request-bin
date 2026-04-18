@@ -2,15 +2,17 @@ package main
 
 import (
 	"context"
+	"errors"
 	"log/slog"
+	"net/http"
 	"os"
 
-	"github.com/gin-gonic/gin"
 	dbMigrations "github.com/kingsukhoi/request-bin"
 	"github.com/kingsukhoi/request-bin/pkg/authentication"
 	"github.com/kingsukhoi/request-bin/pkg/conf"
 	"github.com/kingsukhoi/request-bin/pkg/db"
 	"github.com/kingsukhoi/request-bin/pkg/router"
+	"github.com/labstack/echo/v5"
 )
 
 func main() {
@@ -19,7 +21,7 @@ func main() {
 
 	var logger *slog.Logger
 
-	if gin.Mode() == gin.ReleaseMode {
+	if config.JsonLogs {
 		logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	} else {
 		logger = slog.New(slog.NewTextHandler(os.Stdout, nil))
@@ -51,16 +53,17 @@ func main() {
 
 	if config.Tls.KeyPath != "" && config.Tls.CertPath != "" {
 		go func() {
-			errTls := r.RunTLS(config.Tls.Port, config.Tls.CertPath, config.Tls.KeyPath)
-			if errTls != nil {
-				slog.Error("Error starting TLS server", "error", errTls)
+			sc := echo.StartConfig{Address: "0.0.0.0:" + config.Tls.Port}
+			errTls := sc.StartTLS(context.Background(), r, config.Tls.CertPath, config.Tls.KeyPath)
+			if errTls != nil && !errors.Is(err, http.ErrServerClosed) {
+				slog.Error("failed to start server", "error", err)
 			}
 		}()
 	}
 
-	err = r.Run()
+	err = r.Start("0.0.0.0:" + config.Port)
 
-	if err != nil {
+	if err != nil && !errors.Is(err, http.ErrServerClosed) {
 		slog.Error("Error stopping server", "error", err)
 	}
 

@@ -9,10 +9,12 @@ import (
 )
 
 type Conf struct {
+	Port         string       `yaml:"port" env:"PORT" default:"8080"`
 	DbUrl        string       `yaml:"db_url" env:"DB_URL"`
 	Tls          TlsConf      `yaml:"tls" embed:"" prefix:"tls-"`
 	CustomRoutes CustomRoutes `yaml:"custom_routes" embed:"" prefix:"custom-routes-"`
 	FrontEndPath string       `yaml:"front_end_path" env:"FRONT_END_PATH" default:"./frontend/dist"`
+	JsonLogs     bool         `yaml:"json_logs" env:"JSON_LOGS" default:"false"`
 }
 
 type CustomRoutes struct {
@@ -22,7 +24,7 @@ type CustomRoutes struct {
 type TlsConf struct {
 	CertPath string `yaml:"cert_path" env:"TLS_CERT_PATH"`
 	KeyPath  string `yaml:"key_path" env:"TLS_PRIVATE_KEY_PATH"`
-	Port     string `yaml:"port" env:"TLS_PORT" default:"0.0.0.0:8443"`
+	Port     string `yaml:"port" env:"TLS_PORT" default:"8443"`
 }
 
 var configSingleton Conf

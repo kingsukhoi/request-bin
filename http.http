@@ -70,13 +70,13 @@ GET http://localhost:8080/rbv1/requests?next_token='0199fa59-8b6b-7182-b333-6cd5
 Accept: application/json
 
 ### GET headers by id
-GET http://localhost:8080/rbv1/requests/headers?request_id=0199dee5-f5be-7ac1-b50b-204a770fde67
+GET http://localhost:8080/rbv1/requests/headers?request_id=0199a5a2-4b8b-7795-9d47-21c061cbf4d4
 
 ### GET headers
 GET http://localhost:8080/rbv1/requests/headers
 
 ### GET query params by id
-GET http://localhost:8080/rbv1/requests/queryParams?request_id=0199dee5-f5be-7ac1-b50b-204a770fde67
+GET http://localhost:8080/rbv1/requests/queryParams?request_id=0199fa59-8a96-7cae-b387-6146d44bb291
 
 ### GET query params
 GET http://localhost:8080/rbv1/requests/queryParams
