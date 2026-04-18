@@ -29,6 +29,7 @@ func CreateRouter() *echo.Echo {
 		AllowOrigins: []string{"*"},
 	}))
 	r.Use(middleware.Recover())
+	r.Use(middleware.RequestLogger())
 
 	r.GET("/healthz", routes.HealthCheck)
 	r.GET("/robots.txt", func(c *echo.Context) error {
