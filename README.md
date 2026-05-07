@@ -22,9 +22,9 @@ provides a simple interface to inspect incoming HTTP requests including headers,
 
 ## Architecture
 
-- **Backend**: Go (Gin framework)
+- **Backend**: Go (Echo framework)
 - **Frontend**: React + TypeScript (Vite)
-- **Database**: PostgreSQL 17
+- **Database**: PostgreSQL
 - **Authentication**: JWT with Argon2id password hashing
 
 ## Prerequisites
