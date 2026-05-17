@@ -13,17 +13,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tanstack/react-router": "^1.169.1",
+    "@tanstack/react-router": "^1.169.2",
     "@uiw/react-json-view": "2.0.0-alpha.42",
     "ky": "^2.0.2",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "react-syntax-highlighter": "^16.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@tailwindcss/postcss": "^4.2.4",
-    "@tailwindcss/vite": "^4.2.4",
+    "@tailwindcss/postcss": "^4.3.0",
+    "@tailwindcss/vite": "^4.3.0",
     "@tanstack/router-devtools": "^1.166.13",
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
@@ -35,11 +35,11 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
-    "postcss": "^8.5.13",
-    "tailwindcss": "^4.2.4",
+    "postcss": "^8.5.14",
+    "tailwindcss": "^4.3.0",
     "typescript": "~6.0.3",
-    "typescript-eslint": "^8.59.1",
-    "vite": "^8.0.10"
+    "typescript-eslint": "^8.59.3",
+    "vite": "^8.0.12"
   },
   "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8"
 }
