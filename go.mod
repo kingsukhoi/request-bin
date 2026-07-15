@@ -6,11 +6,11 @@ require (
 	github.com/alecthomas/kong v1.15.0
 	github.com/alecthomas/kong-yaml v0.2.0
 	github.com/alexedwards/argon2id v1.0.0
-	github.com/amacneil/dbmate/v2 v2.33.0
+	github.com/amacneil/dbmate/v2 v2.34.1
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.10.0
-	github.com/labstack/echo/v5 v5.2.1
+	github.com/labstack/echo/v5 v5.3.0
 )
 
 require (
