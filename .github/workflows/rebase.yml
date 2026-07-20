@@ -47,3 +47,11 @@ jobs:
               pack rebase "ghcr.io/${REPO}:${TAG}" --publish 
             fi
           done < <(crane ls "ghcr.io/${REPO}")
+      - uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          packages: "${{ github.event.repository.name }}"
+          delete-orphaned-images: true
+          delete-ghost-images: true
+          delete-untagged: true
+          exclude-tags: 'latest'
+          keep-n-tagged: 10
