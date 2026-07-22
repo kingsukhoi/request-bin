@@ -3,7 +3,7 @@ module github.com/kingsukhoi/request-bin
 go 1.25.0
 
 require (
-	github.com/alecthomas/kong v1.15.0
+	github.com/alecthomas/kong v1.16.0
 	github.com/alecthomas/kong-yaml v0.2.0
 	github.com/alexedwards/argon2id v1.0.0
 	github.com/amacneil/dbmate/v2 v2.34.1
