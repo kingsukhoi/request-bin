@@ -15,7 +15,7 @@ func main() {
 	methods := []string{"GET", "POST", "PUT", "DELETE"}
 
 	for i := range 100 {
-		body := map[string]interface{}{
+		body := map[string]any{
 			"req_number": i,
 		}
 
